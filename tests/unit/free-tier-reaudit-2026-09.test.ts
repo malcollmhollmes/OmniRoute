@@ -28,11 +28,11 @@ test("gemini publishes no per-model free limits any more — uncapped, never sum
   assert.ok(computeFreeModelTotals().uncappedProviders.includes("gemini"));
 });
 
-test("ollama-cloud free plan has no published token cap — uncapped, never summed", () => {
-  const o = rows("ollama-cloud");
-  assert.ok(o.length >= 1);
-  assert.ok(o.every((m) => m.freeType === "recurring-uncapped" && m.monthlyTokens === 0));
-  assert.ok(computeFreeModelTotals().uncappedProviders.includes("ollama-cloud"));
+test("ollama-cloud has no free plan any more - no catalog rows, never uncapped (#19334)", () => {
+  // https://ollama.com/pricing (checked 2026-11-08) lists no free plan; the free
+  // tier ends 2026-11-09 per discussion #19260.
+  assert.equal(rows("ollama-cloud").length, 0);
+  assert.ok(!computeFreeModelTotals().uncappedProviders.includes("ollama-cloud"));
 });
 
 test("groq free plan: 200K TPD per model × 30 = 6M per model, each cap independent", () => {

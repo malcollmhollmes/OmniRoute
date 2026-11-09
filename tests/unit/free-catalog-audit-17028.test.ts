@@ -31,8 +31,9 @@ for (const id of pricedCloudIds) {
       models: [model],
       freeFilterEmpty: false,
     });
-    // Account-specific affirmative evidence remains usable; contradictory prices still veto it.
-    assert.equal(isFreeModel("ollama-cloud", { id, isFree: true }), true);
+    // No documented free tier remains (#19334): account-level free flags no longer
+    // qualify a model, and contradictory prices still veto it.
+    assert.equal(isFreeModel("ollama-cloud", { id, isFree: true }), false);
     assert.equal(isFreeModel("ollama-cloud", { id, isFree: true, pricing: { input: 1 } }), false);
   });
 }
@@ -61,11 +62,7 @@ test("#17028 seven exact free offers have evidence while regional and account ga
     assert.ok(evidence.has(key), key);
     assert.equal(policy.debt.includes(key), false, key);
   }
-  for (const key of [
-    "agnes-cn/agnes-2.5-flash",
-    "aion/aion-labs/aion-3.0",
-    "ollama-cloud/qwen3.5:397b",
-  ]) {
+  for (const key of ["agnes-cn/agnes-2.5-flash", "aion/aion-labs/aion-3.0"]) {
     assert.equal(evidence.has(key), false, key);
     assert.ok(policy.debt.includes(key), key);
   }

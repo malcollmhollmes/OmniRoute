@@ -56,7 +56,10 @@ test("#17028 zero and unknown evidence preserve their existing provider gates", 
   assert.equal(isFreeModel("baidu", { id: catalogId, pricing: {} }), true);
   const zero = { id: "fixture", pricing: { input: 0, output: "0", discount: 2 } };
   assert.equal(isFreeModel("openrouter", zero), true);
-  assert.equal(isFreeModel("ollamacloud", zero), true);
+  assert.equal(isFreeModel("sambanova", zero), true);
+  // ollama-cloud no longer has a documented free tier (#19334): payload evidence
+  // alone cannot qualify a model there, same as anthropic.
+  assert.equal(isFreeModel("ollamacloud", zero), false);
   assert.equal(isFreeModel("anthropic", zero), false);
   assert.equal(isFreeModel("openrouter", { id: "unknown-fixture" }), false);
   assert.equal(isFreeModel("siliconflow", { id: catalogId }), false);

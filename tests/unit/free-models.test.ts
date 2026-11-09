@@ -18,15 +18,20 @@ test("providerHasFreeModels: false for an unknown provider", () => {
 });
 
 test("providerHasFreeModels: resolves a provider alias to its canonical id", () => {
-  // "ollamacloud" is the dashboard alias for the canonical id "ollama-cloud".
-  assert.equal(providerHasFreeModels("ollamacloud"), true);
+  // "samba" is the dashboard alias for the canonical id "sambanova".
+  assert.equal(providerHasFreeModels("samba"), true);
+});
+
+test("providerHasFreeModels: false for ollama-cloud, which lists no free plan (#19334)", () => {
+  assert.equal(providerHasFreeModels("ollama-cloud"), false);
+  assert.equal(providerHasFreeModels("ollamacloud"), false);
 });
 
 test("isFreeModel: catalog membership works when called with the provider alias", () => {
   // Use an unchanged legacy catalog row to exercise alias resolution, not a
   // retired grant. This fixture does not recertify the provider's economics.
-  assert.equal(isFreeModel("ollamacloud", { id: "qwen3.5:397b" }), true);
-  assert.equal(isFreeModel("ollamacloud", { id: "deepseek-v4-pro" }), false);
+  assert.equal(isFreeModel("samba", { id: "DeepSeek-V3.2" }), true);
+  assert.equal(isFreeModel("samba", { id: "deepseek-v4-pro" }), false);
 });
 
 test("isFreeModel: model id ending in :free is free", () => {
